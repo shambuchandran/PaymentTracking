@@ -14,14 +14,26 @@ interface UserDao {
     @Query("SELECT * FROM users")
     fun getUsersWithVisitors():Flow<MutableList<UserWithVisitors>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Query("SELECT * FROM users WHERE id = :userId")
+    fun getUserWithVisitors(userId: Int): Flow<UserWithVisitors>
+
+    @Query("DELETE FROM users")
+    suspend fun deleteAllUsers()
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertUser(user: UserEntity)
+
+    @Query("UPDATE users SET paymentStatus = :newStatus WHERE id = :userId")
+    suspend fun updatePaymentStatus(userId: Int, newStatus: Boolean)
 
     @Delete
     suspend fun deleteUser(user: UserEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertVisitor(visitorEntity: VisitorEntity)
+
+    @Query("DELETE FROM visitors WHERE userId = :userId")
+    suspend fun deleteAllVisitorsOfUser(userId: Int?)
 
     @Delete
     suspend fun deleteVisitor(visitorEntity: VisitorEntity)

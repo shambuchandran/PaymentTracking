@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.paymenttracking.model.room.UserWithVisitors
 import com.example.paymenttracking.model.room.VisitorEntity
@@ -16,12 +17,27 @@ class UserViewModel(
 ) :AndroidViewModel(application) {
     val userWithVisitors : LiveData<List<UserWithVisitors>> = repository.userWithVisitors
 
-    fun fetchUsers()= viewModelScope.launch {
+    fun fetchUsers() = viewModelScope.launch {
         repository.fetchUsers()
+    }
+
+    fun deleteAllUsers() = viewModelScope.launch {
+        repository.deleteAllUsers()
+    }
+    fun deleteAllVisitorsOfUser(userId: Int?) = viewModelScope.launch {
+        repository.deleteAllVisitorsOfUser(userId)
     }
     fun addVisitor(visitor: VisitorEntity) = viewModelScope.launch {
         repository.addVisitors(visitor)
     }
+    fun updatePaymentStatus(userId: Int, newStatus: Boolean) = viewModelScope.launch {
+        repository.updatePaymentStatus(userId, newStatus)
+    }
+
+    fun getUserWithVisitors(userId: Int): LiveData<UserWithVisitors> {
+        return repository.getUserWithVisitors(userId).asLiveData()
+    }
+
 
 }
 

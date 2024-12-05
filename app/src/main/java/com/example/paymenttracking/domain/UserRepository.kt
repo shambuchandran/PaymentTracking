@@ -9,6 +9,7 @@ import com.example.paymenttracking.model.room.UserEntity
 import com.example.paymenttracking.model.room.UserWithVisitors
 import com.example.paymenttracking.model.room.VisitorEntity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 class UserRepository(
@@ -41,11 +42,31 @@ class UserRepository(
             }
         }
     }
+    suspend fun updatePaymentStatus(userId: Int, newStatus: Boolean) {
+        withContext(Dispatchers.IO) {
+            userDao.updatePaymentStatus(userId, newStatus)
+        }
+    }
+
+    suspend fun deleteAllUsers() {
+        withContext(Dispatchers.IO) {
+            userDao.deleteAllUsers()
+        }
+    }
+    suspend fun deleteAllVisitorsOfUser(userId: Int?) {
+        withContext(Dispatchers.IO) {
+            userDao.deleteAllVisitorsOfUser(userId)
+        }
+    }
 
     suspend fun addVisitors(visitor: VisitorEntity) {
         withContext(Dispatchers.IO) {
             userDao.insertVisitor(visitor)
         }
+    }
+
+    fun getUserWithVisitors(userId: Int): Flow<UserWithVisitors> {
+        return userDao.getUserWithVisitors(userId)
     }
 
 }

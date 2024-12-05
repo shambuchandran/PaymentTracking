@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
 interface ApiService {
-    @GET("?results=25&gender=male")
+    @GET("?results=5&gender=male")
     suspend fun getUsers():Response<ApiResponse>
 }
 object RetroFitInstance{
